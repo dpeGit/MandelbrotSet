@@ -4,12 +4,13 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 
 import javax.imageio.ImageIO;
+
+import org.apfloat.Apfloat;
 
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
@@ -23,16 +24,17 @@ public class MakePicture {
 	private int[] colors;
 	private String name;
 	private float percent, oldPercent;
-	private BigDecimal[][] pointsReal;
-	private BigDecimal[][] pointsImagine;
+	private Apfloat[][] pointsReal;
+	private Apfloat[][] pointsImagine;
 	int[][] pixelValues;
+	ListeningExecutorService executor;
 
 	public MakePicture(int w, int h, int m) {
 		width = w;
 		height = h;
 		max = m;
-		pointsReal = new BigDecimal[width][height];
-		pointsImagine = new BigDecimal[width][height];
+		pointsReal = new Apfloat[width][height];
+		pointsImagine = new Apfloat[width][height];
 		image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		colors = new int[max];
 		numPixels = height * width;
@@ -42,6 +44,9 @@ public class MakePicture {
 		pixelValues = new int[width][height];
 		setPalete();
 		makePoints();
+	}
+
+	public MakePicture() {
 	}
 
 	public void start() throws InterruptedException, ExecutionException, IOException {
@@ -57,8 +62,8 @@ public class MakePicture {
 	private void makePoints() {
 		for (int row = 0; row < height; row++) {
 			for (int col = 0; col < width; col++) {
-				BigDecimal real = new BigDecimal((col - width / 2) * 5.0 / width);
-				BigDecimal imagine = new BigDecimal((row - height / 2) * 2.82 / height);
+				Apfloat real = new Apfloat((col - width / 2) * 5.0 / width, 100);
+				Apfloat imagine = new Apfloat((row - height / 2) * 2.82 / height, 100);
 				pointsReal[col][row] = real;
 				pointsImagine[col][row] = imagine;
 			}
@@ -67,7 +72,7 @@ public class MakePicture {
 	}
 
 	private void getSet() throws InterruptedException, ExecutionException, IOException {
-		ListeningExecutorService executor = MoreExecutors.listeningDecorator(Executors.newCachedThreadPool());
+		executor = MoreExecutors.listeningDecorator(Executors.newCachedThreadPool());
 		for (int row = 0; row < height; row++) {
 			for (int col = 0; col < width; col++) {
 				Callable<int[]> callable = new MandelbrotMath(max, pointsReal[col][row], pointsImagine[col][row], col,

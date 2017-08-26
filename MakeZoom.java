@@ -4,10 +4,11 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
+
+import org.apfloat.Apfloat;
 
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
@@ -20,8 +21,8 @@ public class MakeZoom {
 	private BufferedImage image;
 	private int[] colors;
 	private String name;
-	private BigDecimal[][] pointsReal;
-	private BigDecimal[][] pointsImagine;
+	private Apfloat[][] pointsReal;
+	private Apfloat[][] pointsImagine;
 	private int[][] pixelValues;
 	private double time;
 
@@ -31,8 +32,8 @@ public class MakeZoom {
 		max = m;
 		time = t;
 		name = "Mandelbrot " + height + "X" + width + "at" + max + "for" + time + "s" + ".mp4";
-		pointsReal = new BigDecimal[width][height];
-		pointsImagine = new BigDecimal[width][height];
+		pointsReal = new Apfloat[width][height];
+		pointsImagine = new Apfloat[width][height];
 		colors = new int[max];
 		pixelValues = new int[width][height];
 		setPalete();
@@ -52,8 +53,8 @@ public class MakeZoom {
 	private void makePoints(double xMult, double yMult) {
 		for (int row = 0; row < height; row++) {
 			for (int col = 0; col < width; col++) {
-				BigDecimal real = new BigDecimal(((col - width / 2) * xMult / width) + .1477197897737227);
-				BigDecimal imagine = new BigDecimal(((row - height / 2) * yMult / height) - .6463248991533478);
+				Apfloat real = new Apfloat(((col - width / 2) * xMult / width) + .1477197897737227, 100);
+				Apfloat imagine = new Apfloat(((row - height / 2) * yMult / height) - .6463248991533478, 100);
 				pointsReal[col][row] = real;
 				pointsImagine[col][row] = imagine;
 			}

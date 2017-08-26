@@ -23,7 +23,8 @@ public class MandelbrotSet {
 			a1.scanMax();
 			a1.scanTime();
 			long start = System.nanoTime();
-			MakeZoom set = new MakeZoom(a1.getWidth(), a1.getHeight(), a1.getMax(), a1.getTime());
+			MakeZoom set;
+			set = new MakeZoom(a1.getWidth(), a1.getHeight(), a1.getMax(), a1.getTime());
 			set.start();
 			System.out.println((System.nanoTime() - start) / 1000000000 + " seconds");
 		} else {
@@ -46,5 +47,4 @@ public class MandelbrotSet {
 		}
 		return input;
 	}
-
 }

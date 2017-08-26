@@ -1,14 +1,16 @@
 package mandelbrotSet;
 
-import java.math.BigDecimal;
 import java.util.concurrent.Callable;
+
+import org.apfloat.Apfloat;
+import org.apfloat.ApfloatMath;
 
 public class MandelbrotMath implements Callable<int[]> {
 
 	private int m, col, row;
-	private BigDecimal r, i;
+	private Apfloat r, i;
 
-	public MandelbrotMath(int m, BigDecimal r, BigDecimal i, int col, int row) {
+	public MandelbrotMath(int m, Apfloat r, Apfloat i, int col, int row) {
 		this.m = m;
 		this.r = r;
 		this.i = i;
@@ -26,16 +28,17 @@ public class MandelbrotMath implements Callable<int[]> {
 	}
 
 	private int calcPixel() {
-		BigDecimal x = new BigDecimal(0), y = new BigDecimal(0);
+		Apfloat xNew;
+		Apfloat x = new Apfloat(0, 100), y = new Apfloat(0, 100);
 		int iteration = 0;
-		BigDecimal xSqr = x.pow(2);
-		BigDecimal ySqr = y.pow(2);
-		while (xSqr.add(ySqr).compareTo(new BigDecimal(4)) < 0 && iteration < m) {
-			BigDecimal xNew = xSqr.subtract(ySqr).add(r);
-			y = x.multiply(new BigDecimal(2)).multiply(y).add(i);
+		Apfloat xSqr = new Apfloat(0, 100);
+		Apfloat ySqr = new Apfloat(0, 100);
+		while ((xSqr.add(ySqr)).compareTo(new Apfloat(4)) < 0 && iteration < m) {
+			xNew = xSqr.subtract(ySqr).add(r);
+			y = x.multiply(new Apfloat(2)).multiply(y).add(i);
 			x = xNew;
-			xSqr = x.pow(2);
-			ySqr = y.pow(2);
+			xSqr = ApfloatMath.pow(x, 2);
+			ySqr = ApfloatMath.pow(y, 2);
 			iteration++;
 		}
 		if (iteration < m) {
