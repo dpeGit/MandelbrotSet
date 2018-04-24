@@ -5,7 +5,6 @@ import static org.jcodec.codecs.h264.H264Utils.escapeNAL;
 
 import java.nio.ByteBuffer;
 
-import org.jcodec.codecs.h264.encode.DumbRateControl;
 import org.jcodec.codecs.h264.encode.EncodedMB;
 import org.jcodec.codecs.h264.encode.MBEncoderHelper;
 import org.jcodec.codecs.h264.encode.MBEncoderI16x16;
@@ -90,8 +89,7 @@ public class H264Encoder extends VideoEncoder {
 	}
 
 	/**
-	 * Encode this picture into h.264 frame. Frame type will be selected by
-	 * encoder.
+	 * Encode this picture into h.264 frame. Frame type will be selected by encoder.
 	 */
 	public ByteBuffer encodeFrame8Bit(Picture8Bit pic, ByteBuffer _out) {
 		if (frameNumber >= keyInterval) {
@@ -118,9 +116,9 @@ public class H264Encoder extends VideoEncoder {
 	}
 
 	/**
-	 * Encode this picture as a P-frame. P-frame is an frame predicted from one
-	 * or more of the previosly decoded frame and is usually 10x less in size
-	 * then the IDR frame.
+	 * Encode this picture as a P-frame. P-frame is an frame predicted from one or
+	 * more of the previosly decoded frame and is usually 10x less in size then the
+	 * IDR frame.
 	 * 
 	 * @param pic
 	 * @param _out
